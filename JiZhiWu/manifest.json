@@ -5,7 +5,7 @@
 		"matches": [ "*://www.facebook.com/*" ],
 		"run_at": "document_end"
 	}],
-	"description": "A Chrome extension that replaces 蔡正元 with 祭止兀 in www.facebook.com.",
+	"description": "A Chrome extension that replaces 蔡正元 with 祭止兀 in facebook.". 蔡正元筆劃太多了，一起把facebook的蔡正元換成祭止兀吧！
 	"icons": {
 		"128": "icon.png"
 	},

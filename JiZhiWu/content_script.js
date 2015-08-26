@@ -1,4 +1,9 @@
-﻿replaceTsaiJengYuan();
+﻿// 蔡正元筆劃太多了，一起把facebook的蔡正元換成祭止兀吧！
+
+var taget = "蔡正元";
+var replacedWith = "祭止兀";
+
+replaceTsaiJengYuan();
 
 function replaceTsaiJengYuan() {
 	var elements = document.body.getElementsByTagName("*")
@@ -9,9 +14,9 @@ function replaceTsaiJengYuan() {
 		for(var j = 0; j < elements[i].childNodes.length; j++) {
 			if(elements[i].childNodes[j].nodeType == Node.TEXT_NODE) {
 				try	{
-					//Replace 蔡正元 with 祭止兀
-					elements[i].childNodes[j].textContent = replaceOccurrences("蔡正元", "祭止兀", elements[i].childNodes[j].textContent);
-					//Add the attribute to make sure it won't get replaced again
+					// Replace 蔡正元 with 祭止兀
+					elements[i].childNodes[j].textContent = replaceOccurrences(elements[i].childNodes[j].textContent, taget, replacedWith);
+					// Mark the text so that it won't get replaced again
 					elements[i].setAttribute("jizhiwued", "true");
 				} catch(err) { 
 					console.error("Error: " + err.message);
@@ -21,24 +26,23 @@ function replaceTsaiJengYuan() {
 	}
 }
 
-function replaceOccurrences(target, replace, str) {
+function replaceOccurrences(str, target, replacedWith) {
 	var indices = getIndicesOf(target, str);
-	for(var i = 0; i < indices.length; i++) {	
+	for(var i = 0; i < indices.length; i++) {
 		str = remove(str, indices[i], target.length);
-		str = insert(str, indices[i], replace);
+		str = insert(str, indices[i], replacedWith);
+		// Correct next index length, in case that replacedWith.length != target.length
 		if(i + 1 < indices.length)
-			indices[i + 1] += (replace.length - target.length) * (i + 1);
+			indices[i + 1] += (replacedWith.length - target.length) * (i + 1);
 	}
 	return str;
 }
 
-function getIndicesOf(searchStr, str) {
-    var startIndex = 0, searchStrLen = searchStr.length;
+function getIndicesOf(target, str) {
+    var startIndex = 0, searchStrLen = target.length;
     var index, indices = [];
 	
-	searchStr = searchStr.toLowerCase();
-	
-    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+    while ((index = str.indexOf(target, startIndex)) > -1) {
 
 		indices.push(index);
 		
@@ -58,14 +62,14 @@ function insert(str, index, replacedWith) {
 		return replacedWith + str;
 }
 
-/*	RE-REPLACE WHEN PAGE UPDATES */
+// Re-replace when the page updates
 var observer = new MutationObserver(function(mutationRecords) {
 	replaceTsaiJengYuan();
 });
 
 observer.observe(document.body,
 {  // options:
-	subtree: true,  // observe the subtree rooted at myNode
-	childList: true,  // include information childNode insertion/removals
-	attribute: true,  // include information about changes to attributes within the subtree
+	subtree: true,    // Set to true if mutations to not just target, but also target's descendants are to be observed.
+	childList: true,  // Set to true if additions and removals of the target node's child elements (including text nodes) are to be observed.
+	attribute: true,  // Set to true if mutations to target's attributes are to be observed.
 });
